@@ -2,8 +2,20 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const expressHBS = require("express-handlebars");
 
 const app = express();
+
+app.engine(
+  "hbs",
+  expressHBS({
+    layoutsDir: "views/layouts/",
+    defaultLayout: "main-layout",
+    extname: "hbs"
+  })
+);
+app.set("view engine", "hbs");
+app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/shop");
@@ -19,11 +31,11 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes.router);
 app.use(userRoutes);
 
 app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
+  res.status(404).render("404", { docTitle: "Pagen Not Found!" });
 });
 
 app.listen(3000);
