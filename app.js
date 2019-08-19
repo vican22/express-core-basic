@@ -11,6 +11,7 @@ app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/shop");
+const four0fourController = require('./controllers/404')
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -26,8 +27,6 @@ app.use((req, res, next) => {
 app.use("/admin", adminRoutes.router);
 app.use(userRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).render("404", { docTitle: "Pagen Not Found!", path: '' });
-});
+app.use(four0fourController.get404);
 
 app.listen(3000);
